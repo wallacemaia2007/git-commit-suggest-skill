@@ -1,0 +1,35 @@
+{
+  "name": "git-commit-suggest",
+  "owner": {
+    "name": "Wallace"
+  },
+  "metadata": {
+    "description": "Configurable Conventional Commits suggestion skill for AI agents"
+  },
+  "plugins": [
+    {
+      "name": "git-commit-suggest",
+      "source": "./",
+      "description": "Suggest commit messages based on git diff. Conventional Commit types stay in English, summary and details follow config.json language.",
+      "version": "1.2.0",
+      "author": {
+        "name": "Wallace"
+      },
+      "homepage": "https://github.com/wallacemaia2007/git-commit-suggest-skill",
+      "repository": "https://github.com/wallacemaia2007/git-commit-suggest-skill",
+      "license": "MIT",
+      "keywords": [
+        "git",
+        "commit",
+        "conventional-commits",
+        "ai-skills"
+      ],
+      "category": "productivity",
+      "tags": [
+        "git",
+        "commit",
+        "conventional-commits"
+      ]
+    }
+  ]
+}

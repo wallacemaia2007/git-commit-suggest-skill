@@ -1,0 +1,19 @@
+{
+  "name": "git-commit-suggest",
+  "version": "1.2.0",
+  "description": "Configurable Conventional Commits suggestion skill. Types stay in English, summary and details follow your config language.",
+  "author": {
+    "name": "Wallace"
+  },
+  "repository": "https://github.com/wallacemaia2007/git-commit-suggest-skill",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "commit",
+    "conventional-commits",
+    "ai-skill",
+    "claude-code",
+    "codex"
+  ],
+  "skills": "./skills"
+}

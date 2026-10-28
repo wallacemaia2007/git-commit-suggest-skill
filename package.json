@@ -1,0 +1,58 @@
+{
+  "name": "git-commit-suggest",
+  "version": "1.2.0",
+  "description": "Configurable Conventional Commits suggestion skill for AI agents. Types stay in English, summary and details follow your config language.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "validate:fixtures": "node scripts/validate-fixtures.js",
+    "config": "node bin/cli.js config"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "git-commit-suggest": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "skills/git-commit-suggest/SKILL.md",
+    "skills/git-commit-suggest/config.example.json",
+    "skills/git-commit-suggest/references",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".claude-plugin",
+    ".codex-plugin",
+    ".codex-marketplace",
+    ".agents",
+    "docs",
+    "scripts",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    ".gitignore",
+    "tests"
+  ],
+  "keywords": [
+    "git",
+    "commit",
+    "conventional-commits",
+    "ai-skill",
+    "claude-code",
+    "codex",
+    "cursor",
+    "continue",
+    "roocode",
+    "opencode"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wallacemaia2007/git-commit-suggest-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wallacemaia2007/git-commit-suggest-skill/issues"
+  },
+  "homepage": "https://github.com/wallacemaia2007/git-commit-suggest-skill#readme"
+}

@@ -1,0 +1,15 @@
+{
+  "configVersion": 1,
+  "language": "en",
+  "maxSubjectLength": 72,
+  "detailCount": {
+    "min": 2,
+    "max": 4
+  },
+  "bodySeparator": "blank",
+  "scope": {
+    "allow": true,
+    "autoDetect": true
+  },
+  "imperativeMood": true
+}

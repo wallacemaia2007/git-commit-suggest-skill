@@ -1,0 +1,11 @@
+{
+  "name": "git-commit-suggest",
+  "version": "1.2.0",
+  "description": "Configurable Conventional Commits suggestion skill for Codex and Claude Code.",
+  "skills": [
+    {
+      "name": "git-commit-suggest",
+      "path": "skills/git-commit-suggest/SKILL.md"
+    }
+  ]
+}

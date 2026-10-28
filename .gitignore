@@ -1,0 +1,4 @@
+.DS_Store
+Thumbs.db
+*.log
+skills/git-commit-suggest/config.json
