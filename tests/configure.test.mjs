@@ -70,7 +70,12 @@ test("API rejects missing token and invalid Host, then saves valid config and cl
   const dir = temporarySkill(t);
   const token = "test-token";
   const server = createServer({ port: 0, token, directory: dir });
-  t.after(() => { if (server.listening) server.close(); });
+  t.after(async () => {
+    if (!server.listening) return;
+    const closed = once(server, "close");
+    await rawRequest(server.address().port, "/api/cancel", { "X-Token": token, "Content-Type": "application/json" }, "{}");
+    await closed;
+  });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
   const port = server.address().port;
@@ -85,6 +90,8 @@ test("API rejects missing token and invalid Host, then saves valid config and cl
   const saved = await fetch(`${base}/api/save`, { method: "POST", headers, body: JSON.stringify({ config: { ...getDefaultConfig(), language: "pt-BR" } }) });
   assert.equal(saved.status, 200);
   assert.equal(JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8")).language, "pt-BR");
+  const cancelled = await fetch(`${base}/api/cancel`, { method: "POST", headers, body: "{}" });
+  assert.equal(cancelled.status, 200);
   await closed;
 });
 
@@ -100,8 +107,10 @@ test("--serve reads its token from the environment instead of process arguments"
   child.stderr.setEncoding("utf8").on("data", chunk => output += chunk);
   t.after(async () => {
     if (child.exitCode === null) {
-      child.kill();
-      await once(child, "exit");
+      const exited = once(child, "exit");
+      try { await fetch(`http://127.0.0.1:${port}/api/cancel`, { method: "POST", headers: { "X-Token": token }, body: "{}" }); } catch {}
+      await Promise.race([exited, new Promise(resolve => setTimeout(resolve, 2500))]);
+      if (child.exitCode === null) child.kill();
     }
   });
 
@@ -120,6 +129,10 @@ test("--serve reads its token from the environment instead of process arguments"
   }
   assert.equal(authorized, true, output);
   assert.equal((await fetch(`http://127.0.0.1:${port}/api/options`, { headers: { "X-Token": "wrong-token" } })).status, 403);
+  const exited = once(child, "exit");
+  const cancelled = await fetch(`http://127.0.0.1:${port}/api/cancel`, { method: "POST", headers: { "X-Token": token }, body: "{}" });
+  assert.equal(cancelled.status, 200);
+  await exited;
 });
 
 test("--serve rejects a token argument and reports a missing environment token", async () => {

@@ -54,6 +54,8 @@ test("skill instructions document setup fallback and both body separators", () =
 });
 
 test("release metadata uses one version across all manifests", () => {
+  const packageJson = JSON.parse(fs.readFileSync(path.join(repo, "package.json"), "utf8"));
+  assert.ok(packageJson.files.includes("bin"), "the resolver module must be included with the bin directory");
   const files = [
     "package.json",
     ".claude-plugin/plugin.json",
