@@ -6,6 +6,9 @@
   <a href="https://github.com/wallacemaia2007/git-commit-suggest-skill/releases">
     <img src="https://img.shields.io/github/v/release/wallacemaia2007/git-commit-suggest-skill?style=for-the-badge&color=8a63d2&label=release" alt="Latest release">
   </a>
+  <a href="https://github.com/wallacemaia2007/git-commit-suggest-skill/actions/workflows/test.yml">
+    <img src="https://github.com/wallacemaia2007/git-commit-suggest-skill/actions/workflows/test.yml/badge.svg" alt="Tests">
+  </a>
   <a href="https://docs.anthropic.com/claude/docs/claude-code">
     <img src="https://img.shields.io/badge/Claude_Code-Compatible-D97757?style=for-the-badge&logo=anthropic&logoColor=white" alt="Claude Code Compatible">
   </a>

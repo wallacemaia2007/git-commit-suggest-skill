@@ -149,6 +149,26 @@ test("--serve rejects a token argument and reports a missing environment token",
   assert.match(`${argument.stdout}${argument.stderr}`, /aceita apenas a porta/);
 });
 
+test("--no-open prints a ready configuration URL and supports authenticated cancellation", t => {
+  const dir = temporarySkill(t);
+  const result = spawnSync(process.execPath, [configure(dir), "--no-open"], { encoding: "utf8", timeout: 10000 });
+  assert.equal(result.status, 0, result.stderr);
+  const match = result.stdout.match(/http:\/\/127\.0\.0\.1:(\d+)\/\?token=([a-f\d]+)/i);
+  assert.ok(match, `configuration URL was not printed: ${result.stdout}`);
+  const base = `http://127.0.0.1:${match[1]}`;
+  const token = match[2];
+
+  return (async () => {
+    try {
+      const response = await fetch(match[0]);
+      assert.equal(response.status, 200);
+    } finally {
+      const cancelled = await fetch(`${base}/api/cancel`, { method: "POST", headers: { "X-Token": token }, body: "{}" });
+      assert.equal(cancelled.status, 200);
+    }
+  })();
+});
+
 test("--set validates, writes, and leaves config untouched on invalid values", t => {
   const dir = temporarySkill(t);
   const script = configure(dir);
