@@ -20,7 +20,6 @@
     "skills/git-commit-suggest/config.example.json",
     "skills/git-commit-suggest/references",
     "AGENTS.md",
-    "SKILL.md",
     "CLAUDE.md",
     "skills/git-commit-suggest/scripts",
     ".claude-plugin",

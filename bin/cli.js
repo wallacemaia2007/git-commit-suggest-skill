@@ -17,7 +17,7 @@ for (let index = 0; index < args.length; index++) {
   else rest.push(value);
 }
 if (!configOnly) {
-  const install = spawnSync("npx", ["skills", "add", repo, ...installFlags], { stdio: "inherit", shell: process.platform === "win32" });
+  const install = spawnSync("npx", ["skills", "add", repo, "--skill", "git-commit-suggest", ...installFlags], { stdio: "inherit", shell: process.platform === "win32" });
   if (install.error) throw install.error;
   if (install.status !== 0) process.exit(install.status ?? 1);
 }

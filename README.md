@@ -89,7 +89,7 @@ npx git-commit-suggest
 
 This command installs the skill with the official `skills add` CLI, then opens its local configuration page as soon as installation finishes.
 
-To run the official installer directly, use `npx skills add wallacemaia2007/git-commit-suggest-skill`. That command only copies the skill, so the configuration page opens when the skill is first activated instead.
+To run the official installer directly, use `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`. The `--skill` option installs only this skill from the repository. That command only copies the skill, so the configuration page opens when the skill is first activated instead.
 
 ### npx (install and configure)
 
@@ -108,7 +108,7 @@ Quando instalada pelo wrapper `npx git-commit-suggest`, a página abre assim que
 ### degit (quick copy)
 
 ```bash
-npx degit wallacemaia2007/git-commit-suggest-skill .agents/skills/git-commit-suggest
+npx degit wallacemaia2007/git-commit-suggest-skill/skills/git-commit-suggest .agents/skills/git-commit-suggest
 ```
 
 ### Manual install
