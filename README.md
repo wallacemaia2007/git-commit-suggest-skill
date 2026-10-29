@@ -75,7 +75,7 @@ Claude.ai currently installs custom skills by uploading a ZIP file, not by addin
 
 1. Download this repository and create a ZIP whose root contains the `git-commit-suggest/` skill folder (the folder containing `SKILL.md`).
 2. In Claude, open **Settings → Capabilities → Skills** and upload the ZIP. Enable code execution and file creation if Claude asks for it.
-3. Enable the uploaded skill. It will create its local configuration on first use.
+3. Enable the uploaded skill. On first use, it opens the required configuration page; save the settings before requesting a commit suggestion.
 
 See Anthropic's [instructions for using Skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
 
@@ -103,7 +103,7 @@ The first command installs the skill and opens configuration right after install
 
 ### Instalação e configuração
 
-Quando instalada pelo wrapper `npx git-commit-suggest`, a página abre assim que o download e a instalação acabam. Se usar diretamente `npx skills add`, a própria skill abre a configuração quando for ativada pela primeira vez. Sem navegador, ela pergunta o idioma no chat; sem shell, usa o idioma do pedido e os padrões. Para reconfigurar, peça ao agente, rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada ou use `npx git-commit-suggest config`. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
+Quando instalada pelo wrapper `npx git-commit-suggest`, a página abre assim que o download e a instalação acabam. Se usar diretamente `npx skills add`, a própria skill abre a configuração quando for ativada pela primeira vez. É obrigatório salvar a configuração antes de receber uma sugestão; cancelar não libera o uso. Se não houver navegador, abra a URL impressa pelo script. Para reconfigurar, peça ao agente, rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada ou use `npx git-commit-suggest config`. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
 
 ### degit (quick copy)
 
@@ -113,7 +113,7 @@ npx degit wallacemaia2007/git-commit-suggest-skill .agents/skills/git-commit-sug
 
 ### Manual install
 
-Copy the entire `skills/git-commit-suggest/` folder to `.agents/skills/git-commit-suggest/`. The first use creates `config.json` next to `SKILL.md`.
+Copy the entire `skills/git-commit-suggest/` folder to `.agents/skills/git-commit-suggest/`. The first use opens the required configuration page; save settings before asking the agent for a commit suggestion.
 
 ## Usage
 

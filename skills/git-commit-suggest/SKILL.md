@@ -9,13 +9,15 @@ Use esta skill quando o usuário pedir uma sugestão de mensagem de commit com b
 
 ## Configuração
 
-### Primeiro uso
+### Primeiro uso obrigatório
 
-Procure `config.json` no mesmo diretório deste `SKILL.md`. Se não existir e houver shell disponível, execute `node <pasta-da-skill>/scripts/configure.mjs`. Avise em uma frase, no idioma do usuário, que abriu a página de configuração; inclua a URL impressa pelo comando se o navegador não abrir. Enquanto isso, entregue a sugestão normalmente usando os padrões e o idioma do pedido. Não repita o aviso quando `config.json` já existir.
+Antes de analisar qualquer diff, execute `node <pasta-da-skill>/scripts/configure.mjs --print` e confira `setupCompleted` em `config.json`, no mesmo diretório deste `SKILL.md`.
 
-### Sem navegador ou sem shell
+- Se `setupCompleted` for `true`, carregue as opções configuradas e continue.
+- Se o arquivo não existir ou `setupCompleted` não for `true`, execute `node <pasta-da-skill>/scripts/configure.mjs`. Avise o usuário, no idioma dele, que a página de configuração foi aberta e inclua a URL impressa se o navegador não abrir. Pare aqui: não leia o diff nem sugira uma mensagem até o usuário salvar a configuração.
+- Se não houver shell para abrir a página, explique que a configuração é obrigatória e não use a skill. Peça para o usuário executar o script na pasta instalada e tentar novamente depois de salvar.
 
-Se não houver navegador, pergunte no chat qual idioma o usuário prefere e, se houver shell, grave a escolha com `node <pasta-da-skill>/scripts/configure.mjs --set language=<código>`. Sem shell, use o idioma do pedido e continue.
+Cancelar a página não conclui a configuração. Restaurar os padrões só conta como configuração depois de clicar em Salvar.
 
 ### Reconfigurar
 
@@ -29,7 +31,7 @@ O agente nunca edita `config.json` manualmente; use sempre o script, que valida 
 2. Prefira `git diff --cached`; se estiver vazio, use `git diff`.
 3. Leia o início dos arquivos novos relevantes. Em diffs grandes, comece por `git diff --stat` e ignore arquivos de lock, `dist/`, `build/` e `*.min.*` ao resumir.
 4. Classifique a mudança e escolha um scope apenas quando for claro. Tipos como `feat`, `fix`, `refactor`, `perf`, `docs`, `style`, `test`, `build`, `ci`, `chore` e `revert` permanecem em inglês.
-5. Escreva assunto e detalhes no idioma configurado, respeitando `maxSubjectLength`, `detailCount`, `bodySeparator`, `scope` e `imperativeMood` em `config.json`. Se ainda não houver configuração, use os padrões e o idioma do pedido.
+5. Escreva assunto e detalhes no idioma configurado, respeitando `maxSubjectLength`, `detailCount`, `bodySeparator`, `scope` e `imperativeMood` em `config.json`.
 6. Procure indícios de segredos e avise antes de sugerir a mensagem.
 
 Nunca execute `git add`, `git commit` ou `git push`. Entregue uma mensagem pronta para colar, com a quantidade de bullets configurada. Consulte [references/examples.md](references/examples.md) para exemplos.

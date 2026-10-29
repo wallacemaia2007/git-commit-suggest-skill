@@ -1,6 +1,6 @@
 # Configuração
 
-Instale com `npx git-commit-suggest` para abrir a página de configuração assim que a instalação terminar. O comando oficial direto `npx skills add wallacemaia2007/git-commit-suggest-skill` apenas copia a skill; nesse caso, a página abre quando ela for ativada pela primeira vez. Sem navegador, escolha o idioma no chat; se não houver shell, a skill usa o idioma do pedido.
+Instale com `npx git-commit-suggest` para abrir a página de configuração assim que a instalação terminar. O comando oficial direto `npx skills add wallacemaia2007/git-commit-suggest-skill` apenas copia a skill; nesse caso, a página abre quando ela for ativada pela primeira vez. É obrigatório salvar as configurações antes de usar a skill. Se não houver navegador, abra a URL impressa pelo script; sem shell, execute o script na pasta instalada e tente novamente depois de salvar. Cancelar não conclui a configuração.
 
 Reconfigure com `node <pasta-da-skill>/scripts/configure.mjs`, pedindo ao agente, ou com `npx git-commit-suggest config`.
 

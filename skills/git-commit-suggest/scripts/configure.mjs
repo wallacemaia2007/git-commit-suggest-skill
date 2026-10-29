@@ -104,7 +104,6 @@ export function createServer({ port, token, directory = skillDir } = {}) {
       request.on("data", chunk => { body += chunk; if (body.length > 100_000) request.destroy(); });
       request.on("end", () => {
         if (url.pathname === "/api/cancel") {
-          if (!fs.existsSync(path.join(directory, "config.json"))) saveConfig({ ...getDefaultConfig(), setupCompleted: true }, console.warn, directory);
           response.writeHead(200, { "Content-Type": "application/json" }); response.end(JSON.stringify({ cancelled: true }));
           setTimeout(() => server.close(), 2000).unref(); return;
         }
