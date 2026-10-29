@@ -67,11 +67,15 @@ async function terminal() {
   const interfaceRl = readline.createInterface({ input: process.stdin, output: process.stdout });
   try {
     const lines = interfaceRl[Symbol.asyncIterator]();
+    let receivedInput = false;
     for (const option of options) {
       const current = getValue(config, option.key);
       const hint = option.choices ? ` (${option.choices.join(", ")})` : option.type === "confirm" ? " (true/false)" : ` (${option.min}-${option.max})`;
       process.stdout.write(`${option.label}${hint} [${current}]: `);
-      const { value: answer = "" } = await lines.next();
+      const { value: line, done } = await lines.next();
+      if (done && !receivedInput) throw new Error("Nenhuma entrada foi recebida. Use --set chave=valor ou --defaults para configurar.");
+      if (!done) receivedInput = true;
+      const answer = line ?? "";
       if (answer.trim()) setValue(config, option.key, parseValue(option, answer.trim()));
     }
   } finally { interfaceRl.close(); }

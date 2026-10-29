@@ -167,7 +167,7 @@ test("--terminal saves complete answers supplied through a pipe", t => {
   assert.equal(saved.setupCompleted, true);
 });
 
-test("--terminal keeps current values when pipe input is partial or immediately reaches EOF", t => {
+test("--terminal keeps current values when pipe input is partial", t => {
   const dir = temporarySkill(t);
   const script = configure(dir);
   const preset = spawnSync(process.execPath, [script, "--set", "maxSubjectLength=80", "--set", "language=es"], { encoding: "utf8" });
@@ -180,10 +180,22 @@ test("--terminal keeps current values when pipe input is partial or immediately 
   assert.equal(saved.maxSubjectLength, 80);
   assert.equal(saved.setupCompleted, true);
 
-  fs.rmSync(path.join(dir, "config.json"));
-  const eof = spawnSync(process.execPath, [script, "--terminal"], { input: "", encoding: "utf8" });
-  assert.equal(eof.status, 0, eof.stderr);
-  saved = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+});
+
+test("--terminal rejects EOF before any response without writing config", t => {
+  const dir = temporarySkill(t);
+  const result = spawnSync(process.execPath, [configure(dir), "--terminal"], { input: "", encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.match(`${result.stdout}${result.stderr}`, /Nenhuma entrada foi recebida/);
+  assert.match(`${result.stdout}${result.stderr}`, /--set chave=valor ou --defaults/);
+  assert.equal(fs.existsSync(path.join(dir, "config.json")), false);
+});
+
+test("--terminal treats an empty line as a response and saves current values", t => {
+  const dir = temporarySkill(t);
+  const result = spawnSync(process.execPath, [configure(dir), "--terminal"], { input: "\n", encoding: "utf8" });
+  assert.equal(result.status, 0, result.stderr);
+  const saved = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
   assert.equal(saved.setupCompleted, true);
   assert.equal(saved.language, "en");
 });
