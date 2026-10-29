@@ -134,14 +134,39 @@ function openBrowser(url) {
   child.on("error", () => {}); child.unref();
 }
 
-function launchServer(noOpen) {
-  const token = crypto.randomBytes(32).toString("hex");
-  const port = 20_000 + crypto.randomInt(40_000);
-  const child = spawn(process.execPath, [scriptPath, "--serve", String(port), token], { detached: true, stdio: "ignore", windowsHide: true });
-  child.unref();
-  const url = `http://127.0.0.1:${port}/?token=${token}`;
-  console.log(`Interface de configuração: ${url}`);
-  if (!noOpen && shouldOpen()) openBrowser(url);
+function isServerReady(port) {
+  return new Promise(resolve => {
+    const request = http.get({ host: "127.0.0.1", port, path: "/", timeout: 500 }, response => { response.resume(); resolve(response.statusCode === 200); });
+    request.on("error", () => resolve(false));
+    request.on("timeout", () => { request.destroy(); resolve(false); });
+  });
+}
+
+async function waitForServer(port, child, timeoutMs = 5000) {
+  let exited = false;
+  child.once("exit", () => { exited = true; });
+  const deadline = Date.now() + timeoutMs;
+  while (!exited && Date.now() < deadline) {
+    if (await isServerReady(port)) return true;
+    await new Promise(resolve => setTimeout(resolve, 25));
+  }
+  return false;
+}
+
+async function launchServer(noOpen) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const token = crypto.randomBytes(32).toString("hex");
+    const port = 20_000 + crypto.randomInt(40_000);
+    const child = spawn(process.execPath, [scriptPath, "--serve", String(port), token], { detached: true, stdio: "ignore", windowsHide: true });
+    child.unref();
+    if (!(await waitForServer(port, child))) continue;
+    const url = `http://127.0.0.1:${port}/?token=${token}`;
+    console.log(`Interface de configuração: ${url}`);
+    if (!noOpen && shouldOpen()) openBrowser(url);
+    return;
+  }
+  console.error("Não foi possível iniciar a interface de configuração. Use --terminal ou --set language=pt-BR.");
+  process.exitCode = 1;
 }
 
 function runServer(port, token) {
@@ -164,7 +189,7 @@ async function main(args) {
   }
   if (assignments.length) { saveConfig({ ...applySets(loadConfig(), assignments), setupCompleted: true }); console.log(`Configuração salva em: ${configFile}`); return; }
   if (useTerminal) return terminal();
-  launchServer(noOpen);
+  return launchServer(noOpen);
 }
 
 if (process.argv[1] && fs.realpathSync(process.argv[1]) === scriptPath) main(process.argv.slice(2)).catch(error => { console.error(error.message); process.exitCode = 1; });

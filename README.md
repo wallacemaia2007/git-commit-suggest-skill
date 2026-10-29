@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
   <img src="assets/hero.png" alt="git-commit-suggest - Configurable Conventional Commits for AI Agents" width="900" />
 </p>
 
@@ -32,11 +32,11 @@
 </p>
 
 <p align="center">
-  <a href="#install">Install</a> â€¢
-  <a href="#usage">Usage</a> â€¢
-  <a href="#configuration">Configuration</a> â€¢
-  <a href="#examples">Examples</a> â€¢
-  <a href="#docs">Docs</a> â€¢
+  <a href="#install">Install</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#configuration">Configuration</a> •
+  <a href="#examples">Examples</a> •
+  <a href="#docs">Docs</a> •
   <a href="#license">License</a>
 </p>
 
@@ -44,12 +44,12 @@
 
 `git-commit-suggest` is a lightweight AI skill that analyzes your staged or unstaged Git changes and suggests a ready-to-paste commit message following the [Conventional Commits](https://www.conventionalcommits.org/) standard.
 
-- **Language agnostic** â€“ Set your preferred language in `config.json`. Only the summary and bullet details change.
-- **Types stay standard** â€“ `feat`, `fix`, `refactor`, `perf`, `docs`, `style`, `test`, `build`, `ci`, `chore`, `revert` remain in English.
-- **Smart detection** â€“ Checks `git diff --cached` first, falls back to `git diff` if nothing is staged.
-- **Scope aware** â€“ Auto-detects a meaningful `(scope)` when possible, but never forces it.
-- **Consistent format** â€“ Uses a blank line by default, or a single `-` separator when `bodySeparator` is `dash`.
-- **Imperative & concise** â€“ Keeps the subject short (<= 72 chars) and bullets to the point.
+- **Language agnostic** – Set your preferred language in `config.json`. Only the summary and bullet details change.
+- **Types stay standard** – `feat`, `fix`, `refactor`, `perf`, `docs`, `style`, `test`, `build`, `ci`, `chore`, `revert` remain in English.
+- **Smart detection** – Checks `git diff --cached` first, falls back to `git diff` if nothing is staged.
+- **Scope aware** – Auto-detects a meaningful `(scope)` when possible, but never forces it.
+- **Consistent format** – Uses a blank line by default, or a single `-` separator when `bodySeparator` is `dash`.
+- **Imperative & concise** – Keeps the subject short (<= 72 chars) and bullets to the point.
 
 ## Install
 
@@ -127,8 +127,8 @@ Or in natural language:
 
 ```text
 Suggest a commit message for these changes
-Sugira um commit para essas alteraÃ§Ãµes
-SugiÃ©reme un mensaje de commit para estos cambios
+Sugira um commit para essas alterações
+Sugiéreme un mensaje de commit para estos cambios
 ```
 
 The skill will:
@@ -180,18 +180,18 @@ feat(ui): add mobile navigation menu
 
 ### Portuguese (Brazil)
 ```text
-feat(ui): adiciona menu de navegaÃ§Ã£o mobile
+feat(ui): adiciona menu de navegação mobile
 
-- Implementa botÃ£o hambÃºrguer para telas menores
-- Adiciona animaÃ§Ã£o de deslizamento ao menu
-- Ajusta o cabeÃ§alho para comportar o novo menu
+- Implementa botão hambúrguer para telas menores
+- Adiciona animação de deslizamento ao menu
+- Ajusta o cabeçalho para comportar o novo menu
 ```
 
 ### Spanish
 ```text
-feat(api): aÃ±ade validaciÃ³n para el registro de usuarios
+feat(api): añade validación para el registro de usuarios
 
-- Agrega validaciÃ³n con Zod en el endpoint
+- Agrega validación con Zod en el endpoint
 - Muestra mensajes de error claros
 - Impide registros con correos duplicados
 ```
@@ -200,9 +200,9 @@ feat(api): aÃ±ade validaciÃ³n para el registro de usuarios
 ```text
 fix(auth): corrige l'expiration du jeton
 
-- Met Ã  jour la logique de rafraÃ®chissement du token
-- GÃ¨re correctement les sessions expirÃ©es
-- Affiche un message clair Ã  l'utilisateur
+- Met à jour la logique de rafraîchissement du token
+- Gère correctement les sessions expirées
+- Affiche un message clair à l'utilisateur
 ```
 
 More examples in [docs/EXAMPLES.md](docs/EXAMPLES.md).
@@ -219,4 +219,4 @@ Contributions are welcome! Feel free to open issues, suggest improvements or sub
 
 ## License
 
-[MIT](LICENSE) Â© 2025 [wallacemaia2007](https://github.com/wallacemaia2007)
+[MIT](LICENSE) © 2025 [wallacemaia2007](https://github.com/wallacemaia2007)
