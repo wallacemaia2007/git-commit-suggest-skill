@@ -71,9 +71,13 @@ codex plugin add git-commit-suggest@git-commit-suggest
 
 ### Claude.ai (web) / Claude Desktop
 
-1. Open **Settings â†’ Skills â†’ Add from GitHub**
-2. Paste: `wallacemaia2007/git-commit-suggest-skill`
-3. Done. The skill will activate automatically when you ask for a commit suggestion.
+Claude.ai currently installs custom skills by uploading a ZIP file, not by adding a GitHub repository directly.
+
+1. Download this repository and create a ZIP whose root contains the `git-commit-suggest/` skill folder (the folder containing `SKILL.md`).
+2. In Claude, open **Settings → Capabilities → Skills** and upload the ZIP. Enable code execution and file creation if Claude asks for it.
+3. Enable the uploaded skill. It will create its local configuration on first use.
+
+See Anthropic's [instructions for using Skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
 
 ### Any agent (skills CLI)
 
@@ -116,7 +120,7 @@ Copy the entire `skills/git-commit-suggest/` folder to `.agents/skills/git-commi
 After installing, just ask your agent for a suggestion:
 
 ```text
-@suggest-commit
+@git-commit-suggest
 ```
 
 Or in natural language:
