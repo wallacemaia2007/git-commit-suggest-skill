@@ -92,6 +92,53 @@ test("--set validates, writes, and leaves config untouched on invalid values", t
   assert.equal(fs.readFileSync(configFile, "utf8"), before);
 });
 
+test("--terminal saves complete answers supplied through a pipe", t => {
+  const dir = temporarySkill(t);
+  const result = spawnSync(process.execPath, [configure(dir), "--terminal"], {
+    input: "pt-BR\n88\n1\n3\ndash\nfalse\ntrue\nfalse\n",
+    encoding: "utf8"
+  });
+  assert.equal(result.status, 0, result.stderr);
+  const saved = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+  assert.equal(saved.language, "pt-BR");
+  assert.equal(saved.maxSubjectLength, 88);
+  assert.deepEqual(saved.detailCount, { min: 1, max: 3 });
+  assert.equal(saved.bodySeparator, "dash");
+  assert.equal(saved.scope.allow, false);
+  assert.equal(saved.scope.autoDetect, true);
+  assert.equal(saved.imperativeMood, false);
+  assert.equal(saved.setupCompleted, true);
+});
+
+test("--terminal keeps current values when pipe input is partial or immediately reaches EOF", t => {
+  const dir = temporarySkill(t);
+  const script = configure(dir);
+  const preset = spawnSync(process.execPath, [script, "--set", "maxSubjectLength=80", "--set", "language=es"], { encoding: "utf8" });
+  assert.equal(preset.status, 0, preset.stderr);
+
+  const partial = spawnSync(process.execPath, [script, "--terminal"], { input: "fr\n", encoding: "utf8" });
+  assert.equal(partial.status, 0, partial.stderr);
+  let saved = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+  assert.equal(saved.language, "fr");
+  assert.equal(saved.maxSubjectLength, 80);
+  assert.equal(saved.setupCompleted, true);
+
+  fs.rmSync(path.join(dir, "config.json"));
+  const eof = spawnSync(process.execPath, [script, "--terminal"], { input: "", encoding: "utf8" });
+  assert.equal(eof.status, 0, eof.stderr);
+  saved = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+  assert.equal(saved.setupCompleted, true);
+  assert.equal(saved.language, "en");
+});
+
+test("--terminal rejects invalid pipe input without writing config", t => {
+  const dir = temporarySkill(t);
+  const result = spawnSync(process.execPath, [configure(dir), "--terminal"], { input: "xx\n", encoding: "utf8" });
+  assert.equal(result.status, 1);
+  assert.match(`${result.stdout}${result.stderr}`, /Valor inválido para Idioma/);
+  assert.equal(fs.existsSync(path.join(dir, "config.json")), false);
+});
+
 test("configure resolves its skill through a symlink", async t => {
   const dir = temporarySkill(t);
   const link = path.join(path.dirname(dir), "configure-link.mjs");

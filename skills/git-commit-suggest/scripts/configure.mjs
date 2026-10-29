@@ -66,14 +66,28 @@ async function terminal() {
   const config = loadConfig();
   const interfaceRl = readline.createInterface({ input: process.stdin, output: process.stdout });
   try {
+    const lines = interfaceRl[Symbol.asyncIterator]();
     for (const option of options) {
       const current = getValue(config, option.key);
       const hint = option.choices ? ` (${option.choices.join(", ")})` : option.type === "confirm" ? " (true/false)" : ` (${option.min}-${option.max})`;
-      const answer = await new Promise(resolve => interfaceRl.question(`${option.label}${hint} [${current}]: `, resolve));
+      process.stdout.write(`${option.label}${hint} [${current}]: `);
+      const { value: answer = "" } = await lines.next();
       if (answer.trim()) setValue(config, option.key, parseValue(option, answer.trim()));
     }
   } finally { interfaceRl.close(); }
-  saveConfig({ ...applySets(getDefaultConfig(), options.map(option => `${option.key}=${String(getValue(config, option.key))}`)), setupCompleted: true });
+  const checked = validateConfig(config);
+  if (checked.errors.length) {
+    const messages = checked.errors.map(error => {
+      if (error.key === "detailCount") return "O mínimo de detalhes não pode ser maior que o máximo.";
+      const option = options.find(item => item.key === error.key);
+      if (!option) return `Valor inválido para ${error.key}.`;
+      if (option.choices) return `Valor inválido para ${option.label}. Opções aceitas: ${option.choices.join(", ")}.`;
+      if (option.type === "number") return `Valor inválido para ${option.label}. Informe um número inteiro entre ${option.min} e ${option.max}.`;
+      return `Valor inválido para ${option.label}. Informe true ou false.`;
+    });
+    throw new Error(messages.join(" "));
+  }
+  saveConfig({ ...checked.config, setupCompleted: true });
   console.log(`Configuração salva em: ${configFile}`);
 }
 
