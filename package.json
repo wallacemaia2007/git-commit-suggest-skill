@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "validate:fixtures": "node scripts/validate-fixtures.js",
-    "config": "node bin/cli.js config"
+    "generate:config-docs": "node scripts/generate-config-docs.mjs",
+    "config": "node skills/git-commit-suggest/scripts/configure.mjs"
   },
   "engines": {
     "node": ">=18"
@@ -21,6 +21,7 @@
     "skills/git-commit-suggest/references",
     "AGENTS.md",
     "CLAUDE.md",
+    "skills/git-commit-suggest/scripts",
     ".claude-plugin",
     ".codex-plugin",
     ".codex-marketplace",

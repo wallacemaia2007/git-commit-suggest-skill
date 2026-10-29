@@ -80,22 +80,26 @@ codex plugin add git-commit-suggest@git-commit-suggest
 Works with Claude Code, Codex, Cursor, Continue, RooCode, OpenCode and more.
 
 ```bash
-npx skills add wallacemaia2007/git-commit-suggest-skill
+npx git-commit-suggest
 ```
 
-### npx (direct install)
+This command installs the skill with the official `skills add` CLI, then opens its local configuration page as soon as installation finishes.
+
+To run the official installer directly, use `npx skills add wallacemaia2007/git-commit-suggest-skill`. That command only copies the skill, so the configuration page opens when the skill is first activated instead.
+
+### npx (install and configure)
 
 ```bash
 npx git-commit-suggest
 npx git-commit-suggest config
-npx git-commit-suggest --yes --lang pt-BR
+npx git-commit-suggest -g -a -y
 ```
+
+The first command installs the skill and opens configuration right after installation. Use `config` to reopen settings. `-g` selects global installation; `-a` and `-y` are forwarded to the Skills CLI.
 
 ### Instalação e configuração
 
-O comando `npx git-commit-suggest` instala a skill e abre uma interface web local, sem dependências de runtime. A interface permite escolher idioma, formato, quantidade de detalhes e destinos de instalação. Por padrão, o modo de instalação considera os destinos de projeto (`.claude/skills` e `.agents/skills`); use `--global` para os destinos globais. Se não houver ambiente gráfico, use `--terminal` para responder às perguntas no terminal. `--no-open` apenas imprime a URL local.
-
-Use `npx git-commit-suggest config` (ou `npm run config` neste repositório, que edita `skills/git-commit-suggest`) para reabrir a configuração de uma instalação existente. Flags úteis incluem `--global`, `--project`, `--lang <código>`, `--port <n>` e `--yes` para automação.
+Quando instalada pelo wrapper `npx git-commit-suggest`, a página abre assim que o download e a instalação acabam. Se usar diretamente `npx skills add`, a própria skill abre a configuração quando for ativada pela primeira vez. Sem navegador, ela pergunta o idioma no chat; sem shell, usa o idioma do pedido e os padrões. Para reconfigurar, peça ao agente, rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada ou use `npx git-commit-suggest config`. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
 
 ### degit (quick copy)
 
@@ -105,7 +109,7 @@ npx degit wallacemaia2007/git-commit-suggest-skill .agents/skills/git-commit-sug
 
 ### Manual install
 
-Copy `skills/git-commit-suggest/` to `.agents/skills/git-commit-suggest/` in your project and keep `SKILL.md`, `config.example.json` and `references/`. `config.json` is created by the installer or the configuration UI; without it, the skill falls back to `config.example.json`.
+Copy the entire `skills/git-commit-suggest/` folder to `.agents/skills/git-commit-suggest/`. The first use creates `config.json` next to `SKILL.md`.
 
 ## Usage
 
@@ -132,7 +136,7 @@ The skill will:
 
 ## Configuration
 
-Edit `skills/git-commit-suggest/config.json` (created by the installer) to change the output language and format. Missing or invalid values are replaced with defaults automatically.
+Use the local configuration page or `node <pasta-da-skill>/scripts/configure.mjs --set language=pt-BR` to change the output language and format. Do not edit `config.json` by hand; invalid stored values are replaced with defaults by the script.
 
 ```json
 {

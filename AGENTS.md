@@ -9,6 +9,6 @@ This repo provides the `git-commit-suggest` skill for AI agents.
 
 ## Usage
 When asked for a git commit suggestion, load `skills/git-commit-suggest/SKILL.md`. 
-Read `skills/git-commit-suggest/config.json` first. 
+Read `config.json` beside the installed `SKILL.md` first. On first use, run that skill's `scripts/configure.mjs`; never edit its config by hand.
 Conventional Commit types must remain in English. Summary and bullets follow `language`.
 Use `bodySeparator` for the separator between subject and details; it defaults to a blank line.

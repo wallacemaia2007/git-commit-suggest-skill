@@ -9,41 +9,36 @@ export const options = [
   { key: "imperativeMood", type: "confirm", label: "Usar modo imperativo", description: "Prefere verbos no modo imperativo.", group: "Estilo", default: true }
 ];
 
-export function getDefaultConfig() {
-  const config = { configVersion: 1 };
-  for (const option of options) setValue(config, option.key, option.default);
-  return config;
-}
-
-export function getValue(object, key) {
-  return key.split(".").reduce((value, part) => value?.[part], object);
-}
-
+export const getValue = (object, key) => key.split(".").reduce((value, part) => value?.[part], object);
 export function setValue(object, key, value) {
   const parts = key.split(".");
   let target = object;
   for (const part of parts.slice(0, -1)) target = target[part] ??= {};
   target[parts.at(-1)] = value;
 }
-
+export function getDefaultConfig() {
+  const config = { configVersion: 1 };
+  for (const option of options) setValue(config, option.key, option.default);
+  return config;
+}
 export function validateConfig(input) {
-  const output = getDefaultConfig();
+  const config = getDefaultConfig();
   const errors = [];
   for (const option of options) {
     const value = getValue(input ?? {}, option.key);
     if (value === undefined) continue;
     let valid = typeof value === (option.type === "number" ? "number" : option.type === "confirm" ? "boolean" : "string");
-    if (option.type === "number") valid = valid && Number.isInteger(value) && value >= option.min && value <= option.max;
-    if (option.choices) valid = valid && option.choices.includes(value);
-    if (!valid) errors.push({ key: option.key, value });
-    else setValue(output, option.key, value);
+    if (option.type === "number") valid &&= Number.isInteger(value) && value >= option.min && value <= option.max;
+    if (option.choices) valid &&= option.choices.includes(value);
+    if (valid) setValue(config, option.key, value);
+    else errors.push({ key: option.key, value });
   }
-  const min = getValue(output, "detailCount.min");
-  const max = getValue(output, "detailCount.max");
+  const min = getValue(config, "detailCount.min");
+  const max = getValue(config, "detailCount.max");
   if (min > max) {
     errors.push({ key: "detailCount", value: { min, max } });
-    setValue(output, "detailCount.min", getValue(getDefaultConfig(), "detailCount.min"));
-    setValue(output, "detailCount.max", getValue(getDefaultConfig(), "detailCount.max"));
+    setValue(config, "detailCount.min", 2);
+    setValue(config, "detailCount.max", 4);
   }
-  return { config: output, errors };
+  return { config, errors };
 }

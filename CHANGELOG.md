@@ -2,10 +2,10 @@
 
 ## 1.2.0 - 2026-10-28
 
-- Adiciona instalação via `npx` com interface web local e fallback no terminal.
-- Permite configurar e reconfigurar a skill sem sobrescrever escolhas existentes.
-- Adiciona validação, testes nativos do Node e destinos de projeto/global.
-- Corrige a interface web, a abertura do navegador no Windows e a seleção de múltiplos destinos.
+- Adiciona configuração local no primeiro uso, com interface web dentro da skill.
+- Permite configurar pelo navegador, terminal, argumentos ou valores padrão, sem dependências.
+- Mantém escolhas existentes, valida valores e grava o arquivo de forma atômica.
+- Atualiza a documentação e o CLI opcional para usar o comando oficial `skills add`.
 
 ## 1.1.0 - 2026-10-28
 

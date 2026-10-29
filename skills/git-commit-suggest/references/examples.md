@@ -29,6 +29,33 @@ feat(ui): añade menú de navegación móvil
 - Ajusta el encabezado para el nuevo menú
 ```
 
+## Francês
+
+```text
+fix(auth): corrige l’expiration du jeton
+
+- Met à jour le renouvellement du jeton
+- Gère les sessions expirées
+```
+
+## Italiano
+
+```text
+feat(ui): migliora il menu di navigazione
+
+- Aggiunge il pulsante per gli schermi piccoli
+- Mantiene l’anteprima sincronizzata
+```
+
+## Alemão
+
+```text
+fix(auth): behebt den Ablauf des Sitzungstokens
+
+- Aktualisiert die Token-Erneuerung
+- Behandelt abgelaufene Sitzungen
+```
+
 ## Breaking change
 
 ```text
