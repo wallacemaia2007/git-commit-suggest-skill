@@ -16,6 +16,7 @@ function temporarySkill(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "git-commit-suggest-"));
   const skill = path.join(root, "skill");
   fs.cpSync(sourceSkill, skill, { recursive: true });
+  fs.rmSync(path.join(skill, "config.json"), { force: true });
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   return skill;
 }

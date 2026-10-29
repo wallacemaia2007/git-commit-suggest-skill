@@ -84,26 +84,14 @@ See Anthropic's [instructions for using Skills in Claude](https://support.claude
 Works with Claude Code, Codex, Cursor, Continue, RooCode, OpenCode and more.
 
 ```bash
-npx git-commit-suggest
+npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest
 ```
 
-This command installs the skill with the official `skills add` CLI, then opens its local configuration page as soon as installation finishes.
-
-To run the official installer directly, use `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`. The `--skill` option installs only this skill from the repository. That command only copies the skill, so the configuration page opens when the skill is first activated instead.
-
-### npx (install and configure)
-
-```bash
-npx git-commit-suggest
-npx git-commit-suggest config
-npx git-commit-suggest -g -a -y
-```
-
-The first command installs the skill and opens configuration right after installation. Use `config` to reopen settings. `-g` selects global installation; `-a` and `-y` are forwarded to the Skills CLI.
+This installs only this skill from the repository. The configuration page opens the first time the skill is activated; save the settings before requesting a commit suggestion.
 
 ### Instalação e configuração
 
-Quando instalada pelo wrapper `npx git-commit-suggest`, a página abre assim que o download e a instalação acabam. Se usar diretamente `npx skills add`, a própria skill abre a configuração quando for ativada pela primeira vez. É obrigatório salvar a configuração antes de receber uma sugestão; cancelar não libera o uso. Se não houver navegador, abra a URL impressa pelo script. Para reconfigurar, peça ao agente, rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada ou use `npx git-commit-suggest config`. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
+Ao usar `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`, a skill abre a página de configuração quando for ativada pela primeira vez. É obrigatório salvar a configuração antes de receber uma sugestão; cancelar não libera o uso. Se não houver navegador, siga o fallback descrito em `skills/git-commit-suggest/SKILL.md`. Para reconfigurar, peça ao agente ou rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
 
 ### degit (quick copy)
 
