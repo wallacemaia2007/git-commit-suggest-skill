@@ -42,7 +42,8 @@ test("no flags preserves the previous project then global order and returns ever
 });
 
 test("CLI warns which copy it configures and how to configure the other copies", t => {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), "git-commit-suggest-cli-"));
+  // Resolve symlinks (macOS /var -> /private/var) and Windows 8.3 short names, so the path matches the child process cwd.
+  const root = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), "git-commit-suggest-cli-")));
   const project = path.join(root, "project");
   const homeDirectory = path.join(root, "home");
   fs.mkdirSync(project, { recursive: true });
