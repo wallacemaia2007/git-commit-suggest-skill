@@ -14,8 +14,9 @@ Use esta skill quando o usuário pedir uma sugestão de mensagem de commit com b
 Antes de analisar qualquer diff, execute `node <pasta-da-skill>/scripts/configure.mjs --print` e confira `setupCompleted` em `config.json`, no mesmo diretório deste `SKILL.md`.
 
 - Se `setupCompleted` for `true`, carregue as opções configuradas e continue.
-- Se o arquivo não existir ou `setupCompleted` não for `true`, execute `node <pasta-da-skill>/scripts/configure.mjs`. Avise o usuário, no idioma dele, que a página de configuração foi aberta e inclua a URL impressa se o navegador não abrir. Pare aqui: não leia o diff nem sugira uma mensagem até o usuário salvar a configuração.
-- Se não houver shell para abrir a página, explique que a configuração é obrigatória e não use a skill. Peça para o usuário executar o script na pasta instalada e tentar novamente depois de salvar.
+- Se o arquivo não existir ou `setupCompleted` não for `true`, execute `node <pasta-da-skill>/scripts/configure.mjs`. Se a página abrir, avise o usuário, no idioma dele, e pare até que ele salve a configuração.
+- Se o usuário disser que a página não abre, ou se o ambiente não puder acessar o servidor local (como Claude.ai web, SSH, remoto ou WSL sem navegador), pergunte no chat qual idioma usar (`en`, `pt-BR`, `es`, `fr`, `it` ou `de`). Pergunte se também quer ajustar outros campos; só altere os campos que ele escolher. Os campos opcionais são `maxSubjectLength` (40–100), `detailCount.min` e `detailCount.max` (1–10), `bodySeparator` (`blank` ou `dash`), `scope.allow`, `scope.autoDetect` e `imperativeMood` (booleanos). Use um `--set chave=valor` para cada campo, por exemplo: `node <pasta-da-skill>/scripts/configure.mjs --set language=pt-BR --set bodySeparator=dash`. O script valida os valores e marca `setupCompleted`; em seguida, confira com `node <pasta-da-skill>/scripts/configure.mjs --print` e continue a sugestão no mesmo turno.
+- Se não houver shell, explique que a configuração é obrigatória e não use a skill. Peça para o usuário executar o script na pasta instalada e tentar novamente depois de salvar.
 
 Cancelar a página não conclui a configuração. Restaurar os padrões só conta como configuração depois de clicar em Salvar.
 
@@ -35,3 +36,26 @@ O agente nunca edita `config.json` manualmente; use sempre o script, que valida 
 6. Procure indícios de segredos e avise antes de sugerir a mensagem.
 
 Nunca execute `git add`, `git commit` ou `git push`. Entregue uma mensagem pronta para colar, com a quantidade de bullets configurada. Consulte [references/examples.md](references/examples.md) para exemplos.
+
+## Formato da mensagem
+
+`bodySeparator` controla a separação entre o assunto e os detalhes. O assunto nunca fica colado ao separador nem aos bullets. A quantidade de bullets deve ficar entre `detailCount.min` e `detailCount.max`.
+
+- `blank`: assunto, uma linha em branco e bullets `- ...`.
+
+  ```text
+  fix(api): handle empty responses
+
+  - Return an empty result
+  - Add a regression check
+  ```
+
+- `dash`: assunto, uma linha em branco, uma linha contendo apenas `-`, e então os bullets `- ...`.
+
+  ```text
+  fix(api): handle empty responses
+
+  -
+  - Return an empty result
+  - Add a regression check
+  ```
