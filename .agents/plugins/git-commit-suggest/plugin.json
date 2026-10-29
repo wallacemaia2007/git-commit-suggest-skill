@@ -1,6 +1,6 @@
 {
   "name": "git-commit-suggest",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Configurable Conventional Commits suggestion skill",
   "repository": "https://github.com/wallacemaia2007/git-commit-suggest-skill",
   "skills": [

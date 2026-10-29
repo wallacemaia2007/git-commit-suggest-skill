@@ -2,3 +2,4 @@
 Thumbs.db
 *.log
 skills/git-commit-suggest/config.json
+/skills-lock.json

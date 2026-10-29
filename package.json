@@ -1,6 +1,6 @@
 {
   "name": "git-commit-suggest",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Configurable Conventional Commits suggestion skill for AI agents. Types stay in English, summary and details follow your config language.",
   "type": "module",
   "scripts": {

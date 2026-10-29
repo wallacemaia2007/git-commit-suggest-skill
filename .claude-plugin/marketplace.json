@@ -11,7 +11,7 @@
       "name": "git-commit-suggest",
       "source": "./",
       "description": "Suggest commit messages based on git diff. Conventional Commit types stay in English, summary and details follow config.json language.",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": {
         "name": "Wallace"
       },
