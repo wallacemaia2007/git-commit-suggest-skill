@@ -4,7 +4,8 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import http from "node:http";
-import { spawnSync } from "node:child_process";
+import net from "node:net";
+import { spawn, spawnSync } from "node:child_process";
 import { once } from "node:events";
 import { fileURLToPath } from "node:url";
 import { options, getDefaultConfig, getValue, validateConfig } from "../skills/git-commit-suggest/scripts/options.mjs";
@@ -31,6 +32,14 @@ function rawRequest(port, requestPath, headers = {}, body) {
     if (body) request.write(body);
     request.end();
   });
+}
+async function freePort() {
+  const server = net.createServer();
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  const { port } = server.address();
+  await new Promise((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
+  return port;
 }
 
 test("each option has a valid default", () => {
@@ -77,6 +86,54 @@ test("API rejects missing token and invalid Host, then saves valid config and cl
   assert.equal(saved.status, 200);
   assert.equal(JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8")).language, "pt-BR");
   await closed;
+});
+
+test("--serve reads its token from the environment instead of process arguments", async t => {
+  const port = await freePort();
+  const token = "environment-token";
+  const child = spawn(process.execPath, [configure(sourceSkill), "--serve", String(port)], {
+    env: { ...process.env, GIT_COMMIT_SUGGEST_TOKEN: token },
+    stdio: ["ignore", "pipe", "pipe"]
+  });
+  let output = "";
+  child.stdout.setEncoding("utf8").on("data", chunk => output += chunk);
+  child.stderr.setEncoding("utf8").on("data", chunk => output += chunk);
+  t.after(async () => {
+    if (child.exitCode === null) {
+      child.kill();
+      await once(child, "exit");
+    }
+  });
+
+  assert.equal(child.spawnargs.includes(token), false);
+  assert.deepEqual(child.spawnargs.slice(-2), ["--serve", String(port)]);
+  let authorized;
+  const deadline = Date.now() + 5000;
+  while (!authorized && Date.now() < deadline && child.exitCode === null) {
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/api/options`, { headers: { "X-Token": token } });
+      if (response.status === 200) authorized = true;
+      else await response.arrayBuffer();
+    } catch {
+      await new Promise(resolve => setTimeout(resolve, 25));
+    }
+  }
+  assert.equal(authorized, true, output);
+  assert.equal((await fetch(`http://127.0.0.1:${port}/api/options`, { headers: { "X-Token": "wrong-token" } })).status, 403);
+});
+
+test("--serve rejects a token argument and reports a missing environment token", async () => {
+  const port = await freePort();
+  const env = { ...process.env };
+  delete env.GIT_COMMIT_SUGGEST_TOKEN;
+
+  const missing = spawnSync(process.execPath, [configure(sourceSkill), "--serve", String(port)], { encoding: "utf8", env });
+  assert.equal(missing.status, 1);
+  assert.match(`${missing.stdout}${missing.stderr}`, /GIT_COMMIT_SUGGEST_TOKEN/);
+
+  const argument = spawnSync(process.execPath, [configure(sourceSkill), "--serve", String(port), "argument-token"], { encoding: "utf8", env: { ...env, GIT_COMMIT_SUGGEST_TOKEN: "environment-token" } });
+  assert.equal(argument.status, 1);
+  assert.match(`${argument.stdout}${argument.stderr}`, /aceita apenas a porta/);
 });
 
 test("--set validates, writes, and leaves config untouched on invalid values", t => {

@@ -171,7 +171,12 @@ async function launchServer(noOpen) {
   for (let attempt = 0; attempt < 3; attempt++) {
     const token = crypto.randomBytes(32).toString("hex");
     const port = 20_000 + crypto.randomInt(40_000);
-    const child = spawn(process.execPath, [scriptPath, "--serve", String(port), token], { detached: true, stdio: "ignore", windowsHide: true });
+    const child = spawn(process.execPath, [scriptPath, "--serve", String(port)], {
+      detached: true,
+      stdio: "ignore",
+      windowsHide: true,
+      env: { ...process.env, GIT_COMMIT_SUGGEST_TOKEN: token }
+    });
     child.unref();
     if (!(await waitForServer(port, child))) continue;
     const url = `http://127.0.0.1:${port}/?token=${token}`;
@@ -183,14 +188,27 @@ async function launchServer(noOpen) {
   process.exitCode = 1;
 }
 
-function runServer(port, token) {
+function runServer(port) {
+  const token = process.env.GIT_COMMIT_SUGGEST_TOKEN;
+  if (!token) {
+    console.error("Token do servidor ausente. Defina GIT_COMMIT_SUGGEST_TOKEN no ambiente.");
+    process.exitCode = 1;
+    return;
+  }
   const server = createServer({ port: Number(port), token });
   server.on("error", error => { console.error(error.message); process.exitCode = 1; });
   server.listen(Number(port), "127.0.0.1");
 }
 
 async function main(args) {
-  if (args[0] === "--serve") return runServer(args[1], args[2]);
+  if (args[0] === "--serve") {
+    if (args.length !== 2) {
+      console.error("O modo --serve aceita apenas a porta; passe o token pelo ambiente.");
+      process.exitCode = 1;
+      return;
+    }
+    return runServer(args[1]);
+  }
   if (args[0] === "--print") { console.log(JSON.stringify(loadConfig(), null, 2)); return; }
   if (args[0] === "--defaults") { saveConfig({ ...getDefaultConfig(), setupCompleted: true }); console.log(`Configuração salva em: ${configFile}`); return; }
   const assignments = [];
