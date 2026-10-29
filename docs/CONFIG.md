@@ -1,6 +1,6 @@
 # Configuração
 
-Instale com `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`. A página de configuração abre na primeira ativação da skill; salve as configurações antes de usá-la. Se a página não abrir ou você estiver em um ambiente sem navegador, siga o fallback descrito em [SKILL.md](../skills/git-commit-suggest/SKILL.md). Cancelar não conclui a configuração.
+Instale com `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`. Em instalações locais com navegador acessível, a página de configuração abre na primeira ativação da skill; salve as configurações antes de usá-la. Em ambientes sem navegador acessível, como Claude.ai web, siga o fallback por chat com `--set` descrito em [SKILL.md](../skills/git-commit-suggest/SKILL.md). Cancelar a página não conclui a configuração.
 
 Reconfigure com `node <pasta-da-skill>/scripts/configure.mjs`, pedindo ao agente.
 

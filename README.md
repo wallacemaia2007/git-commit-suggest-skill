@@ -75,7 +75,7 @@ Claude.ai currently installs custom skills by uploading a ZIP file, not by addin
 
 1. Download this repository and create a ZIP whose root contains the `git-commit-suggest/` skill folder (the folder containing `SKILL.md`).
 2. In Claude, open **Settings → Capabilities → Skills** and upload the ZIP. Enable code execution and file creation if Claude asks for it.
-3. Enable the uploaded skill. On first use, it opens the required configuration page; save the settings before requesting a commit suggestion.
+3. Enable the uploaded skill. In Claude.ai web, the first use asks which language to use in chat and saves the setting with `--set`, without opening a configuration page. In local environments with an accessible browser, the configuration page opens on first use.
 
 See Anthropic's [instructions for using Skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude).
 
@@ -87,11 +87,11 @@ Works with Claude Code, Codex, Cursor, Continue, RooCode, OpenCode and more.
 npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest
 ```
 
-This installs only this skill from the repository. The configuration page opens the first time the skill is activated; save the settings before requesting a commit suggestion.
+This installs only this skill from the repository. On first activation, the configuration page opens when the local environment can access a browser. In environments without an accessible browser, use the chat fallback described in [SKILL.md](skills/git-commit-suggest/SKILL.md), which saves settings with `--set`.
 
 ### Instalação e configuração
 
-Ao usar `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`, a skill abre a página de configuração quando for ativada pela primeira vez. É obrigatório salvar a configuração antes de receber uma sugestão; cancelar não libera o uso. Se não houver navegador, siga o fallback descrito em `skills/git-commit-suggest/SKILL.md`. Para reconfigurar, peça ao agente ou rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
+Ao usar `npx skills add wallacemaia2007/git-commit-suggest-skill --skill git-commit-suggest`, a página abre na primeira ativação em ambientes locais com navegador acessível. Em ambientes sem navegador acessível, use o fallback por chat com `--set` descrito em `skills/git-commit-suggest/SKILL.md`. É obrigatório salvar a configuração antes de receber uma sugestão; cancelar a página não conclui o setup. Para reconfigurar, peça ao agente ou rode `node <pasta-da-skill>/scripts/configure.mjs` na pasta instalada. O script também aceita `--set language=pt-BR`, `--defaults`, `--print` e `--terminal`.
 
 ### degit (quick copy)
 
@@ -101,7 +101,7 @@ npx degit wallacemaia2007/git-commit-suggest-skill/skills/git-commit-suggest .ag
 
 ### Manual install
 
-Copy the entire `skills/git-commit-suggest/` folder to `.agents/skills/git-commit-suggest/`. The first use opens the required configuration page; save settings before asking the agent for a commit suggestion.
+Copy the entire `skills/git-commit-suggest/` folder to `.agents/skills/git-commit-suggest/`. On first use, the configuration page opens when the local environment can access a browser. Otherwise, use the chat fallback described in [SKILL.md](skills/git-commit-suggest/SKILL.md).
 
 ## Usage
 

@@ -13,10 +13,26 @@ test("installation docs use the available Skills CLI command", () => {
 
   assert.ok(readme.includes(command));
   assert.ok(config.includes(command));
-  assert.match(readme, /configuration page opens the first time the skill is activated/i);
+  assert.match(readme, /configuration page opens when the local environment can access a browser/i);
   assert.match(config, /página de configuração abre na primeira ativação da skill/i);
   assert.doesNotMatch(readme, /npx git-commit-suggest(?!-skill)/);
   assert.doesNotMatch(config, /npx git-commit-suggest(?!-skill)/);
+});
+
+test("Claude.ai setup instructions use the chat fallback instead of promising a page", () => {
+  const readme = fs.readFileSync(path.join(repo, "README.md"), "utf8");
+  const section = readme.match(/### Claude\.ai \(web\)[\s\S]*?(?=\n### )/)?.[0];
+  assert.ok(section, "README must have a Claude.ai section");
+  assert.match(section, /asks which language to use in chat/i);
+  assert.match(section, /--set/);
+  assert.match(section, /without opening a configuration page/i);
+  assert.doesNotMatch(section, /first use, it opens the required configuration page/i);
+
+  for (const relative of ["README.md", "docs/CONFIG.md", "docs/USAGE.md"]) {
+    const content = fs.readFileSync(path.join(repo, relative), "utf8");
+    assert.match(content, /without (an )?accessible browser|without browser access|sem navegador acessível/);
+    assert.match(content, /SKILL\.md/);
+  }
 });
 
 test("skill instructions document setup fallback and both body separators", () => {

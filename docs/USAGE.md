@@ -21,4 +21,4 @@
 - `sugira um commit para essas alterações`
 - `suggest a commit message for these git changes`
 
-On first use, the skill opens the configuration page and stops. It does not inspect diffs or suggest a commit until the user saves the settings. Cancelling does not complete setup. The skill never runs `git add`, `git commit`, or `git push`.
+On first use in a local environment with an accessible browser, the skill opens the configuration page and stops. In environments without browser access, such as Claude.ai web, it asks for the language in chat and saves the setting with `--set` as described in [SKILL.md](../skills/git-commit-suggest/SKILL.md). Setup must be saved before the skill inspects diffs or suggests a commit. Cancelling the page does not complete setup. The skill never runs `git add`, `git commit`, or `git push`.
